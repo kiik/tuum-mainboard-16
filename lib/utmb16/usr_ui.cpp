@@ -1,0 +1,80 @@
+/** @file usr_ui.cpp
+ *  @brief Mainboard user input & output interface implementation.
+ *
+ *  @authors Meelik Kiik
+ *  @date 7. October 2016
+ *  @version 0.1
+ */
+
+#include "usr_pins.hpp"
+
+#include "usr_ui.hpp"
+
+#include "application.hpp"
+
+namespace usr {
+
+  RGBLed UI::mL1(LED1_R, LED1_G, LED1_B);
+
+  LedBreathe<RGBLed> UI::uiStatusPulse(&UI::mL1);
+
+  enum EMainState {
+    NONE = 0,
+    INIT,
+    COMM_INIT,
+    COMM_WACK,
+    COMM_READY,
+
+    MAIN_STATE_N,
+  };
+
+  EMainState st = INIT;
+
+  Timer tmr;
+
+  void UI::setup() {
+    uiStatusPulse.breathe();
+    uiStatusPulse.setColor(Color::White);
+
+    tmr.start();
+    tmr.reset();
+  }
+
+  void UI::process() {
+    uiStatusPulse.process();
+
+    switch(st) {
+      case INIT:
+        if(tmr.read_ms() >= 2500) {
+          uiStatusPulse.setColor(Color::Green);
+          uiStatusPulse.blink();
+          st = COMM_INIT;
+          tmr.reset();
+        }
+        break;
+      case COMM_INIT:
+        if(tmr.read_ms() >= 2000) {
+          uiStatusPulse.flash();
+          st = COMM_WACK;
+          tmr.reset();
+        }
+        break;
+      case COMM_WACK:
+        if(tmr.read_ms() >= 1000) {
+          uiStatusPulse.breathe();
+          st = COMM_READY;
+          tmr.reset();
+        }
+        break;
+      case COMM_READY:
+        if(tmr.read_ms() >= 3000) {
+          uiStatusPulse.blink();
+          uiStatusPulse.setColor(Color::Cyan);
+          st = MAIN_STATE_N;
+          tmr.reset();
+        }
+        break;
+    }
+  }
+
+}
