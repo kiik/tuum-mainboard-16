@@ -14,18 +14,10 @@ namespace rtx { namespace llb {
 
   Serial gBus(USBTX, USBRX);
 
-  bool avail = false;
-
-  char buffer[16];
-  size_t char_seq = 0;
+  packet_buf_t dataBuffer;
 
   void on_data() {
-    while(gBus.readable()) buffer[char_seq++] = gBus.getc();
-
-    if(buffer[char_seq - 1] == '\n') {
-      avail = true;
-      char_seq = 0;
-    }
+    while(gBus.readable()) dataBuffer.stream(gBus.getc());
   }
 
   void setup() {
@@ -33,13 +25,7 @@ namespace rtx { namespace llb {
   }
 
   int read(char*& out, size_t& len) {
-    if(!avail) return -1;
-
-    len = char_seq + 1;
-    out = new char[len];
-    strncpy(out, buffer, len);
-
-    return 0;
+    return dataBuffer.read(out, len);
   }
 
   int write(char* in, size_t len) {
