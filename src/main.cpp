@@ -9,42 +9,21 @@
 #include "mbed.h"
 
 #include "rtx_logger.hpp"
-#include "rtx_protocol.hpp"
-#include "rtx_llbus.hpp"
 #include "rtx_MotorState.hpp"
 
 #include "usr_pins.hpp"
 #include "usr_ui.hpp"
+#include "usr_Comm.hpp"
 
 using namespace rtx;
 using namespace usr;
 
-
-char* buf = NULL;
-size_t blen = 0;
-
-void handle_messages() {
-  if(rtx::llb::read(buf, blen) >= 0) {
-    if(!buf) return;
-
-    int res;
-    rtx::Protocol::Message msg;
-    res = rtx::Protocol::parseCommand(buf, msg);
-    if(res >= 0) {
-      gLogger.printf("ACK\n");
-    }
-
-    delete(buf);
-    buf = NULL;
-    blen = 0;
-  }
-}
-
+usr::Comm gComm;
 
 int main() {
-  rtx::llb::setup();
-
   gLogger.printf("Tuum-Mainboard-16_mbed v0.0.1\n");
+
+  gComm.setup();
 
   MotorState mMot1(MOT1);
   Timer tmr;
@@ -63,8 +42,7 @@ int main() {
       tmr.reset();
     }
 
-    handle_messages();
-
+    gComm.process();
     usr::UI::process();
   }
 }
