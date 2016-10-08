@@ -95,6 +95,7 @@ namespace usr {
 
   private:
     static RGBLed mL1;
+    static RGBLed mL2;
 
     static LedBreathe<RGBLed> uiStatusPulse;
   };

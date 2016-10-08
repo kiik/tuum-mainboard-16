@@ -20,8 +20,8 @@ namespace rtx {
   const Color Color::Yellow(1.0,1,0.0);
   const Color Color::Cyan(0.2,1.0,1.0);
 
-  RGBLed::RGBLed(PinName _pR, PinName _pG, PinName _pB):
-    pR(_pR), pG(_pG), pB(_pB)
+  RGBLed::RGBLed(rgb_pin_t rlt):
+    pR(rlt.R), pG(rlt.G), pB(rlt.B)
   {
 #ifndef RGB_PWM_DISABLED
 

@@ -11,6 +11,8 @@
 
 #include "mbed.h"
 
+#include "rtx_llif.hpp"
+
 //#define RGB_PWM_DISABLED
 #define RGB_SPWM
 
@@ -69,7 +71,7 @@ namespace rtx {
   class RGBLed
   {
   public:
-    RGBLed(PinName, PinName, PinName);
+    RGBLed(rgb_pin_t);
 
     void write(float, float, float);
     void write(Color c);

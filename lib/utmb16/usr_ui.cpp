@@ -10,13 +10,12 @@
 
 #include "usr_ui.hpp"
 
-#include "application.hpp"
-
 namespace usr {
 
-  RGBLed UI::mL1(LED1_R, LED1_G, LED1_B);
+  RGBLed UI::mL1(RGB1);
+  RGBLed UI::mL2(RGB2);
 
-  LedBreathe<RGBLed> UI::uiStatusPulse(&UI::mL1);
+  LedBreathe<RGBLed> UI::uiStatusPulse(&UI::mL2);
 
   enum EMainState {
     NONE = 0,
