@@ -13,12 +13,6 @@
 
 namespace rtx {
 
-  static const char* PACKET_BEGIN = "<";
-  static const char* PACKET_END = ">";
-  static const char* PACKET_ID_END = ":";
-  static const char* PACKET_PDELIM = ",";
-  static const int   PACKET_MAX_ARGC = 10;
-
   class Protocol
   {
   public:
@@ -39,14 +33,10 @@ namespace rtx {
 
       }
 
-      ~Message() {
-        cleanup();
-      }
-
       void cleanup() {
         if(argv) {
-          for(size_t i=0; i < argc; i++) free(argv[i]);
-          free(argv);
+          for(size_t i=0; i < argc; i++) delete(argv[i]);
+          delete(argv);
           argv = NULL;
           argc = 0;
         }

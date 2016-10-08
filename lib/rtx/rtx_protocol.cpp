@@ -13,6 +13,12 @@
 
 namespace rtx {
 
+  const char* PACKET_BEGIN = "<";
+  const char* PACKET_END = ">";
+  const char* PACKET_ID_END = ":";
+  const char* PACKET_PDELIM = ",";
+  const int   PACKET_MAX_ARGC = 10;
+
   int Protocol::parseCommand(char* input, Message& out) {
     std::string in = std::string(input);
 
@@ -55,8 +61,8 @@ namespace rtx {
   }
 
   int Protocol::parseIds(const std::string& in, Message& out) {
-    int os1 = in.find(PACKET_BEGIN), os2 = in.find(PACKET_ID_END);
-    int os3 = in.find(PACKET_PDELIM);
+    size_t os1 = in.find(PACKET_BEGIN), os2 = in.find(PACKET_ID_END);
+    size_t os3 = in.find(PACKET_PDELIM);
 
     if((os3 == std::string::npos) || (os3 > os2)) {
       out.id = in.substr(os1 + 1, os2 - os1 - 1);
@@ -72,6 +78,8 @@ namespace rtx {
     int os1 = in.find(PACKET_ID_END), os2 = in.find(PACKET_END);
 
     out.argc = std::count(in.begin(), in.end(), *PACKET_PDELIM) + 1;
+    if(out.argc == 0) return -1;
+
     if(out.sId != "") out.argc--;
     out.argv = new char*[out.argc];
 
@@ -84,8 +92,8 @@ namespace rtx {
 
       buf = in.substr(os1, os2 != -1 ? (os2 - os1) : in.length() - os1 - 1);
 
-      out.argv[n] = new char[buf.length() + 1];
-      strncpy(out.argv[n], buf.c_str(), buf.length() + 1);
+      out.argv[n] = new char[buf.length()];
+      strcpy(out.argv[n], buf.c_str());
 
       n++;
       os1 = os2 + 1;
