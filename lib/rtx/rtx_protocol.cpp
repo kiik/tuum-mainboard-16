@@ -75,7 +75,7 @@ namespace rtx {
   }
 
   int Protocol::parseArgs(const std::string& in, Message& out) {
-    int os1 = in.find(PACKET_ID_END), os2 = in.find(PACKET_END);
+    int os1 = in.find(PACKET_ID_END), os2, os3 = in.find(PACKET_END);
 
     out.argc = std::count(in.begin(), in.end(), *PACKET_PDELIM) + 1;
     if(out.argc == 0) return -1;
@@ -87,13 +87,21 @@ namespace rtx {
     std::string buf;
 
     os1++;
+    size_t len;
     while(os2 != -1 && n < PACKET_MAX_ARGC) {
-      os2 = in.find(PACKET_PDELIM, os1+1);
+      os2 = in.find(PACKET_PDELIM, os1);
+      if(os2 > os3) os2 = os3;
 
-      buf = in.substr(os1, os2 != -1 ? (os2 - os1) : in.length() - os1 - 1);
+      len = os2 != -1 ? (os2 - os1) : in.length() - os1 - 1;
 
-      out.argv[n] = new char[buf.length()];
-      strcpy(out.argv[n], buf.c_str());
+      if(len > 0) {
+        buf = in.substr(os1, len);
+        out.argv[n] = new char[buf.length()];
+        strcpy(out.argv[n], buf.c_str());
+      } else {
+        out.argv[n] = new char[1];
+        out.argv[n][0] = 0;
+      }
 
       n++;
       os1 = os2 + 1;
