@@ -7,8 +7,12 @@
  */
 
 #include <sstream>
+#include <cstdlib>
 
 #include "rtx_logger.hpp"
+#include "rtx_PID.hpp"
+
+#include "usr_hw.hpp"
 #include "usr_Comm.hpp"
 
 namespace usr {
@@ -57,13 +61,22 @@ namespace usr {
   Comm::cmd_kw_t Comm::getKeywordId(const char* in) {
     ckw_map_t::const_iterator it;
     for(it = Comm::cmdKwMap.begin();it != Comm::cmdKwMap.end(); ++it)
-      if(it->first == in) return it->second;
+      if(it->first == in) {
+        gLogger.printf("DBG:%s\n", it->first.c_str());
+        return it->second;
+      }
     return EKW_None;
   }
 
   void msg_ack(const Message& msg) {
     std::stringstream buf;
     buf << "<1:ACK," << msg.id.c_str() << ',' << msg.argc << '>';
+    gLogger.printf("%s\n", buf.str().c_str());
+  }
+
+  void msg_err(const Message& msg) {
+    std::stringstream buf;
+    buf << "<1:ERR," << msg.id.c_str() << ',' << msg.argc << '>';
     gLogger.printf("%s\n", buf.str().c_str());
   }
 
@@ -123,15 +136,37 @@ namespace usr {
         msg_ack(msg);
         msg_debug(msg);
         break;
+      case CRES_None:
+        break;
+      case CRES_ERR:
+        msg_err(msg);
+        msg_debug(msg);
+        break;
+      case CRES_DONE:
+        break;
     }
   }
 
   Comm::cmd_res_t Comm::onSetSpeed(const Message& msg) {
-    //TODO: Motor control
+    if(msg.argc < 4) return CRES_ERR;
 
-    std::stringstream buf;
-    buf << "<1:TODO,onSetSpeed," << msg.id.c_str() << ',' << msg.argc << '>';
-    gLogger.printf("%s\n", buf.str().c_str());
+    switch(getKeywordId(msg.argv[2]))
+    {
+      case EKW_Degree:
+      {
+        int id = atoi(msg.argv[1]);
+        if((id < 0) || (id >= MOTOR_COUNT)) return CRES_ERR;
+        int val = atoi(msg.argv[3]);
+
+        if(val < -10000) val = 10000;
+        else if(val > 10000) val = 10000;
+
+        gMotors[id]->setSpeed(val);
+        break;
+      }
+      case EKW_None:
+        break;
+    }
 
     return CRES_OK;
   }
@@ -167,10 +202,32 @@ namespace usr {
   }
 
   Comm::cmd_res_t Comm::onSetPid(const Message& msg) {
-    //TODO: Pid configuration
-    std::stringstream buf;
-    buf << "<1:TODO,onSetPid," << msg.id.c_str() << ',' << msg.argc << '>';
-    gLogger.printf("%s\n", buf.str().c_str());
+    PID::pid_size_t P, I, D;
+    cmd_res_t res = CRES_None;
+
+    if(msg.argc == 4) {
+      P = atof(msg.argv[1]);
+      I = atof(msg.argv[2]);
+      D = atof(msg.argv[3]);
+    }
+    else if(msg.argc == 2) {
+      if(strcmp("rst", msg.argv[1]) == 0) {
+        P = gP;
+        I = gI;
+        D = gD;
+      } else {
+        res = CRES_ERR;
+      }
+    } else {
+      res = CRES_ERR;
+    }
+
+    if(res == CRES_ERR) return res;
+
+    for(size_t ix = 0; ix < MOTOR_COUNT; ix++) {
+      PID* ptr = gMotors[ix]->getPID();
+      ptr->setPID(P, I, D);
+    }
 
     return CRES_OK;
   }

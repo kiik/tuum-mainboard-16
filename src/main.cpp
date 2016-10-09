@@ -9,10 +9,11 @@
 #include "mbed.h"
 
 #include "rtx_logger.hpp"
-#include "rtx_MotorState.hpp"
+#include "rtx_MotorController.hpp"
 
 #include "usr_pins.hpp"
 #include "usr_ui.hpp"
+#include "usr_hw.hpp"
 #include "usr_Comm.hpp"
 
 using namespace rtx;
@@ -20,27 +21,35 @@ using namespace usr;
 
 usr::Comm gComm;
 
+
+Timer updTmr;
+
+MotorController* mot;
+PID* pid;
+
+void debug_print() {
+  if(updTmr.read_ms() > 1000) {
+    gLogger.printf("\nSpeed = %.2f deg/s. PWM: %.4f. pidv = %.2f, err = %.4f\n", mot->getSpeed(), mot->getPWMValue(), mot->getPIDValue(), mot->getErr());
+    gLogger.printf("PID: p=%.2f, i=%.2f, d=%.2f\n", pid->_p(), pid->_i(), pid->_d());
+    updTmr.reset();
+  }
+}
+
+
 int main() {
   gLogger.printf("Tuum-Mainboard-16_mbed v0.0.1\n");
 
-  gComm.setup();
-
-  MotorState mMot1(MOT1);
-  Timer tmr;
-  tmr.start();
-  tmr.reset();
-
+  usr::hw_init();
   usr::UI::setup();
 
-  while(1) {
-    if(tmr.read_ms() > 1000) {
-      int32_t dp = mMot1.deltaPos();
-      float deg = mMot1.deltaPosDegrees();
-      gLogger.printf("mMot1.dp = %i, .deg = %.2f\n", dp, deg);
+  gComm.setup();
 
-      mMot1.resetDelta();
-      tmr.reset();
-    }
+  mot = usr::gMotors[1];
+  pid = mot->getPID();
+
+  updTmr.start();
+  while(1) {
+    debug_print();
 
     gComm.process();
     usr::UI::process();

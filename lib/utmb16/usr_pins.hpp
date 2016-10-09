@@ -1,7 +1,7 @@
 /** @file usr_pins.hpp
  *  @brief Mainboard pinout mapping.
  *
- *  @authors
+ *  @authors Meelik Kiik
  *  @date 7. October 2016
  *  @version 0.1
  */
