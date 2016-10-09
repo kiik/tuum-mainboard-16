@@ -18,14 +18,24 @@ namespace rtx {
   class MotorState
   {
   public:
+    enum dir_t {
+      DIR_BLOCK = 0,
+      DIR_STOP  = 1,
+      DIR_CW    = 2,
+      DIR_CCW   = 3,
+    };
+
     MotorState(motor_pin_t);
+
+    void setPower(float);
+    void setDirection(dir_t);
+    void updateDirection(dir_t);
 
     void feedbackUpdate();
 
     void resetDelta();
-
     int32_t deltaPos();
-    float deltaPosDegrees();
+    float deltaDegree();
 
   private:
     PwmOut OUT;
@@ -35,6 +45,8 @@ namespace rtx {
 
     int32_t pos, lpos;
     uint8_t enc, lenc;
+    uint8_t pol;
+    dir_t ldir;
 
   };
 

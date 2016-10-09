@@ -14,10 +14,15 @@ namespace rtx {
     OUT(mpt.PWM),
     D1(mpt.D1), D2(mpt.D2),
     EA(mpt.EA), EB(mpt.EB), FLT(mpt.FLT),
-    pos(0), lpos(0), enc(0), lenc(0)
+    pos(0), lpos(0), enc(0), lenc(0),
+    pol(0)
   {
     EA.mode(PullNone);
     EA.mode(PullNone);
+    OUT.period(1.0 / 200.0); // 200Hz
+
+    setDirection(DIR_STOP);
+    setPower(0.0);
 
     EA.rise(this, &MotorState::feedbackUpdate);
     EA.fall(this, &MotorState::feedbackUpdate);
@@ -26,6 +31,37 @@ namespace rtx {
 
     EA.enable_irq();
     EB.enable_irq();
+  }
+
+  void MotorState::setPower(float p) {
+    OUT.write(p);
+  }
+
+  void MotorState::setDirection(dir_t d) {
+    switch(d) {
+      case DIR_CW:
+        D1 = pol;
+        D2 = !pol;
+        break;
+      case DIR_CCW:
+        D1 = !pol;
+        D2 = pol;
+        break;
+      case DIR_BLOCK:
+        D1 = 1;
+        D2 = 1;
+        break;
+      case DIR_STOP:
+        setPower(0.0);
+        break;
+    }
+
+    ldir = d;
+  }
+
+  void MotorState::updateDirection(dir_t d) {
+    if(ldir == d) return;
+    setDirection(d);
   }
 
   void MotorState::feedbackUpdate() {
@@ -47,7 +83,7 @@ namespace rtx {
     return dp;
   }
 
-  float MotorState::deltaPosDegrees() {
+  float MotorState::deltaDegree() {
     return deltaPos() / 1200.0 * 360;
   }
 
