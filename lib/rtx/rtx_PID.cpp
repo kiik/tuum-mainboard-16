@@ -10,9 +10,9 @@
 
 namespace rtx {
 
-  float gP = 1.4;
+  float gP = 2.0;
   float gI = 0.02;
-  float gD = 0.02;
+  float gD = 0.1;
 
   PID::PID():
     P(gP), I(gI), D(gD),

@@ -17,17 +17,13 @@ namespace rtx {
     mMot(mpt),
     m_speed(0), m_targetSpeed(0)
   {
-    mPID.setP(1.0);
-    mPID.setI(0.0);
-    mPID.setD(0.0);
-
     mTmr.start();
   }
 
   void MotorController::setSpeed(double v) {
-    if(v < 0) mMot.updateDirection(MotorState::DIR_CCW);
-    else if(v > 0) mMot.updateDirection(MotorState::DIR_CW);
-    else mMot.updateDirection(MotorState::DIR_STOP);
+    if(v < 0) mMot.setDirection(MotorState::DIR_CW);
+    else if(v > 0) mMot.setDirection(MotorState::DIR_CCW);
+    else mMot.setDirection(MotorState::DIR_STOP);
 
     m_targetSpeed = v;
   }
@@ -41,10 +37,10 @@ namespace rtx {
   double MotorController::getdT() { return m_dt; }
 
   void MotorController::updateSpeed(double dt) {
-    m_speed = mMot.deltaDegree() / dt;
+    m_speed = mMot.deltaDegree() / dt * (m_targetSpeed < 0 ? -1 : 1);
     mMot.resetDelta();
 
-    m_err = m_targetSpeed - m_speed;
+    m_err = abs(m_targetSpeed) - m_speed;
   }
 
   void MotorController::run() {
@@ -54,15 +50,19 @@ namespace rtx {
 
     updateSpeed(dt);
 
-    m_err = m_err / (360.0 * 4);
+    m_err = m_err / (360.0 * 2);
     m_pidv = mPID.run(m_err, dt);
 
     if(abs(m_err) > 0.01)
       m_pwmv += m_pidv;
 
-    if(m_pwmv < 0.0) m_pwmv = 0.01;
-    else if(m_pwmv > 1.0) m_pwmv = 1.0;
-    mMot.setPower(m_pwmv);
+    if(m_pwmv > 1.0) m_pwmv = 1.0;
+    else if(m_pwmv < -1.0) m_pwmv = -1.0;
+
+    if(m_targetSpeed != 0)
+      mMot.setPower(m_pwmv);
+    else
+      mMot.setPower(0.0);
   }
 
   MotorState* MotorController::getMotorState() { return &mMot; }

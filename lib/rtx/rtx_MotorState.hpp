@@ -47,6 +47,7 @@ namespace rtx {
     uint8_t enc, lenc;
     uint8_t pol;
     dir_t ldir;
+    float lpw;
 
   };
 

@@ -35,19 +35,25 @@ namespace rtx {
 
   void MotorState::setPower(float p) {
     OUT.write(p);
+    lpw = p;
   }
 
   void MotorState::setDirection(dir_t d) {
     switch(d) {
       case DIR_CW:
+        setPower(0.0);
         D1 = pol;
         D2 = !pol;
+        setPower(lpw);
         break;
       case DIR_CCW:
+        setPower(0.0);
         D1 = !pol;
         D2 = pol;
+        setPower(lpw);
         break;
       case DIR_BLOCK:
+        setPower(0.0);
         D1 = 1;
         D2 = 1;
         break;
