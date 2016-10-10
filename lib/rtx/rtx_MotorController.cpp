@@ -13,11 +13,14 @@
 
 namespace rtx {
 
+  float ENC_FILTER = 0.0;
+
   MotorController::MotorController(motor_pin_t mpt):
     mMot(mpt),
     m_speed(0), m_targetSpeed(0)
   {
     mTmr.start();
+    cross = false;
   }
 
   void MotorController::setSpeed(double v) {
@@ -36,8 +39,13 @@ namespace rtx {
   double MotorController::getErr() { return m_err; }
   double MotorController::getdT() { return m_dt; }
 
+  double MotorController::getDBGVal() {
+    return m_dbg;
+  }
+
   void MotorController::updateSpeed(double dt) {
-    m_speed = mMot.deltaDegree() / dt * (m_targetSpeed < 0 ? -1 : 1);
+    m_dbg = m_dbg * ENC_FILTER + mMot.deltaDegree() * (1 - ENC_FILTER);
+    m_speed = m_dbg / dt * (m_targetSpeed < 0 ? -1 : 1);
     mMot.resetDelta();
 
     m_err = abs(m_targetSpeed) - m_speed;
@@ -50,11 +58,18 @@ namespace rtx {
 
     updateSpeed(dt);
 
-    m_err = m_err / (360.0 * 2);
-    m_pidv = mPID.run(m_err, dt);
+    m_err = m_err / 1000.0;
+    m_pidv = mPID.run(m_err, dt) / 10.0;
 
-    if(abs(m_err) > 0.01)
-      m_pwmv += m_pidv;
+    if(m_pidv < 0) cross = true;
+    else if(m_pidv > 0) {
+      if(cross) {
+        m_dbg += 1;
+        cross = false;
+      }
+    }
+
+    m_pwmv += m_pidv;
 
     if(m_pwmv > 1.0) m_pwmv = 1.0;
     else if(m_pwmv < -1.0) m_pwmv = -1.0;

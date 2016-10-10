@@ -14,6 +14,8 @@
 
 namespace rtx {
 
+  extern float ENC_FILTER;
+
   class MotorController
   {
   public:
@@ -28,6 +30,8 @@ namespace rtx {
     double getPWMValue();
     double getErr();
 
+    double getDBGVal();
+
     void updateSpeed(double);
     void run();
 
@@ -40,7 +44,9 @@ namespace rtx {
 
     double m_speed, m_targetSpeed;
     double m_err, m_pidv, m_pwmv;
-    double m_dt;
+    double m_dt, m_dbg;
+
+    bool cross;
     Timer mTmr;
   };
 

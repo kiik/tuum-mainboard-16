@@ -11,6 +11,7 @@
 
 #include "rtx_logger.hpp"
 #include "rtx_PID.hpp"
+#include "rtx_MotorController.hpp"
 
 #include "usr_hw.hpp"
 #include "usr_Comm.hpp"
@@ -148,24 +149,30 @@ namespace usr {
   }
 
   Comm::cmd_res_t Comm::onSetSpeed(const Message& msg) {
-    if(msg.argc < 4) return CRES_ERR;
+    size_t c = msg.argc;
 
-    switch(getKeywordId(msg.argv[2]))
-    {
-      case EKW_Degree:
+    if(c == 4) {
+      switch(getKeywordId(msg.argv[2]))
       {
-        int id = atoi(msg.argv[1]);
-        if((id < 0) || (id >= MOTOR_COUNT)) return CRES_ERR;
-        int val = atoi(msg.argv[3]);
+        case EKW_Degree:
+        {
+          int id = atoi(msg.argv[1]);
+          if((id < 0) || (id >= MOTOR_COUNT)) return CRES_ERR;
+          int val = atoi(msg.argv[3]);
 
-        if(val < -10000) val = 10000;
-        else if(val > 10000) val = 10000;
+          if(val < -10000) val = 10000;
+          else if(val > 10000) val = 10000;
 
-        gMotors[id]->setSpeed(val);
+          gMotors[id]->setSpeed(val);
+          break;
+        }
+        case EKW_None:
         break;
       }
-      case EKW_None:
-        break;
+    } else if(c == 3) {
+      if(strcmp("enf", msg.argv[1]) >= 0) rtx::ENC_FILTER = atof(msg.argv[2]);
+    } else {
+      return CRES_ERR;
     }
 
     return CRES_OK;

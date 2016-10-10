@@ -29,7 +29,7 @@ PID* pid;
 
 void debug_print() {
   if(updTmr.read_ms() > 1000) {
-    gLogger.printf("\nSpeed = %.2f deg/s. PWM: %.4f. pidv = %.2f, err = %.4f\n", mot->getSpeed(), mot->getPWMValue(), mot->getPIDValue(), mot->getErr());
+    gLogger.printf("\nSpeed = %.2f deg/s. PWM: %.4f. pidv = %.2f, err = %.4f. dbg = %.2f\n", mot->getSpeed(), mot->getPWMValue(), mot->getPIDValue(), mot->getErr(), mot->getDBGVal());
     gLogger.printf("PID: p=%.2f, i=%.2f, d=%.2f\n", pid->_p(), pid->_i(), pid->_d());
     updTmr.reset();
   }

@@ -31,6 +31,8 @@ namespace rtx {
     void setDirection(dir_t);
     void updateDirection(dir_t);
 
+    void getDBGVal();
+
     void feedbackUpdate();
 
     void resetDelta();
