@@ -15,6 +15,7 @@
 
 #include "usr_hw.hpp"
 #include "usr_Comm.hpp"
+#include "usr_motion.hpp"
 
 namespace usr {
 
@@ -199,11 +200,9 @@ namespace usr {
   }
 
   Comm::cmd_res_t Comm::onOmni(const Message& msg) {
-    //TODO: Omni drive
+    if(msg.argc < 4) return CRES_ERR;
 
-    std::stringstream buf;
-    buf << "<1:TODO,onOmni," << msg.id.c_str() << ',' << msg.argc << '>';
-    gLogger.printf("%s\n", buf.str().c_str());
+    usr::omniDrive(atof(msg.argv[1]), atof(msg.argv[2]), atof(msg.argv[3]));
 
     return CRES_OK;
   }
