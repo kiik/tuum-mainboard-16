@@ -12,6 +12,7 @@
 
 namespace usr {
 
+  RGBLed UI::mL1(RGB1);
   RGBLed UI::mL2(RGB2);
 
   LedBreathe<RGBLed> UI::uiStatusPulse(&UI::mL2);

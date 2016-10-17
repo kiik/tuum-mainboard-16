@@ -93,8 +93,8 @@ namespace usr {
     static void setup();
     static void process();
 
-  private:
     static RGBLed mL1;
+  private:
     static RGBLed mL2;
 
     static LedBreathe<RGBLed> uiStatusPulse;

@@ -12,4 +12,3 @@ For compilation use the 'mbed-cli' python module. ( sudo pip install mbed-cli )
 
 ## Contributors
 Meelik Kiik (kiik.meelik@gmail.com)
-

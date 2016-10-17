@@ -40,37 +40,28 @@ namespace rtx {
   double MotorController::getErr() { return m_err; }
   double MotorController::getdT() { return m_dt; }
 
-  double MotorController::getDBGVal() {
-    return m_dbg;
-  }
-
   void MotorController::updateSpeed(double dt) {
-    m_dbg = m_dbg * ENC_FILTER + mMot.deltaDegree() * (1 - ENC_FILTER);
-    m_speed = m_dbg / dt * (m_targetSpeed < 0 ? -1 : 1);
+    float deg = mMot.deltaDegree();
     mMot.resetDelta();
+    m_speed = deg / dt;
 
-    m_err = abs(m_targetSpeed) - m_speed;
+    m_err = m_targetSpeed - m_speed;
   }
 
   void MotorController::run() {
-    double dt = mTmr.read_us() / (1000.0 * 1000.0);
+    m_dt = mTmr.read_us();
     mTmr.reset();
-    m_dt = dt;
+    m_dt /= 1000.0 * 1000.0; // Convert to seconds.
 
-    updateSpeed(dt);
+    updateSpeed(m_dt);
 
-    m_err = m_err / 1000.0;
-    m_pidv = mPID.run(m_err, dt) / 10.0;
+    m_err = m_err / 1000.0; // Normalize
+    m_pidv = mPID.run(m_err, m_dt);
 
-    if(m_pidv < 0) cross = true;
-    else if(m_pidv > 0) {
-      if(cross) {
-        m_dbg += 1;
-        cross = false;
-      }
-    }
+    if(m_pidv < 0.0) mMot.setDirection(MotorState::DIR_CW);
+    else if(m_pidv > 0.0) mMot.setDirection(MotorState::DIR_CCW);
 
-    m_pwmv += m_pidv;
+    m_pwmv = (m_pidv < 0) ? m_pidv * -1 : m_pidv;
 
     if(m_pwmv > 1.0) m_pwmv = 1.0;
     else if(m_pwmv < -1.0) m_pwmv = -1.0;

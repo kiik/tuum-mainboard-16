@@ -44,6 +44,9 @@ namespace usr {
 
       ECMD_SetPid,
       ECMD_SetEnc,
+
+      ECMD_CHARGE,
+      ECMD_KICK,
     };
 
     enum cmd_kw_t {
@@ -79,6 +82,9 @@ namespace usr {
 
     cmd_res_t onSetPid(const Message&);
     cmd_res_t onSetEnc(const Message&);
+
+    cmd_res_t onCharge(const Message&);
+    cmd_res_t onKick(const Message&);
 
     static cmd_map_t loadCommandMap();
     static ckw_map_t loadKeywordMap();

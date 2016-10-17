@@ -17,6 +17,8 @@
 #include "usr_Comm.hpp"
 #include "usr_motion.hpp"
 
+#include "app.hpp"
+
 namespace usr {
 
   Comm::cmd_map_t Comm::loadCommandMap() {
@@ -29,6 +31,9 @@ namespace usr {
 
     out["pd"] = ECMD_SetPid;
     out["en"] = ECMD_SetEnc;
+
+    out["kick"] = ECMD_KICK;
+    out["chrg"] = ECMD_CHARGE;
 
     return out;
   }
@@ -120,6 +125,10 @@ namespace usr {
         return onSetPid(msg);
       case ECMD_SetEnc:
         return onSetEnc(msg);
+      case ECMD_CHARGE:
+        return onCharge(msg);
+      case ECMD_KICK:
+        return onKick(msg);
       default:
         return CRES_NoCmd;
     }
@@ -243,12 +252,22 @@ namespace usr {
     buf << "<1:TODO,onSetEnc," << msg.id.c_str() << ',' << msg.argc << '>';
     gLogger.printf("%s\n", buf.str().c_str());
 
-    if(msg.argv[0] == "dm") {
+    if(std::string(msg.argv[0]) == "dm") {
       //TODO: Set diameter
-    } else if(msg.argv[0] == "rp") {
+    } else if(std::string(msg.argv[0]) == "rp") {
       //TODO: Encoder reporting
     }
 
+    return CRES_OK;
+  }
+
+  Comm::cmd_res_t Comm::onCharge(const Message& msg) {
+    app::charge();
+    return CRES_OK;
+  }
+
+  Comm::cmd_res_t Comm::onKick(const Message& msg) {
+    app::kick();
     return CRES_OK;
   }
 

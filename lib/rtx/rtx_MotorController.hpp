@@ -44,7 +44,7 @@ namespace rtx {
 
     double m_speed, m_targetSpeed;
     double m_err, m_pidv, m_pwmv;
-    double m_dt, m_dbg;
+    double m_dt;
 
     bool cross;
     Timer mTmr;
