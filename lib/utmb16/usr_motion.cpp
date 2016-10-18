@@ -16,13 +16,12 @@ namespace usr {
   void omniDrive(float spd, float dir, float rot) {
     float v = spd / MOTOR_CMS_TO_DGS;
     float rot_v = rot * 3.243;
-    float rad = dir * M_PI/180;
 
     mot_speed_t vs;
-    vs[0] = v * -sin(rad + MOTOR_ANGLE) + rot_v;
-    vs[1] = v * sin(rad - MOTOR_ANGLE) + rot_v;
-    vs[2] = v * sin(rad + MOTOR_ANGLE) + rot_v;
-    vs[3] = v * -sin(rad - MOTOR_ANGLE) + rot_v;
+    vs[0] = v * -sin(MOTOR_ANGLE - dir) + rot_v;
+    vs[1] = v * -sin(MOTOR_ANGLE + dir) + rot_v;
+    vs[2] = v * sin(MOTOR_ANGLE + dir) + rot_v;
+    vs[3] = v * sin(MOTOR_ANGLE - dir) + rot_v;
 
     set_speed(vs);
   }

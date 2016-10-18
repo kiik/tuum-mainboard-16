@@ -10,9 +10,9 @@
 
 namespace rtx {
 
-  float gP = 2.7;
+  float gP = 0.6;
   float gI = 0.4;
-  float gD = 0.01;
+  float gD = 0.001;
 
   PID::PID():
     P(gP), I(gI), D(gD),
@@ -25,9 +25,12 @@ namespace rtx {
   PID::pid_size_t PID::run(pid_size_t err, float dt) {
     m_p = err;
 
-    m_i += err * dt;
-    if(m_i > 1.0) m_i = 1.0;
-    else if(m_i < -1.0) m_i = -1.0;
+    m_i += err;
+
+    float i_lim = 0.5;
+
+    if(m_i > i_lim) m_i = i_lim;
+    else if(m_i < -i_lim) m_i = -i_lim;
 
     m_d = (err - m_lerr) / dt;
     m_lerr = err;
