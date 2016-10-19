@@ -136,7 +136,7 @@ int main() {
 
   while(1) {
     app::process();
-    debug_print();
+    //debug_print();
 
     gComm.process();
     usr::UI::process();
