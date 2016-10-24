@@ -10,7 +10,6 @@
 
 #include "rtx_logger.hpp"
 #include "rtx_MotorController.hpp"
-#include "usr_hw.hpp"
 
 namespace rtx {
 
