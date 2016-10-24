@@ -47,6 +47,9 @@ namespace usr {
 
       ECMD_CHARGE,
       ECMD_KICK,
+
+      ECMD_Dribbler,
+      ECMD_DribblerWrite,
     };
 
     enum cmd_kw_t {
@@ -85,6 +88,9 @@ namespace usr {
 
     cmd_res_t onCharge(const Message&);
     cmd_res_t onKick(const Message&);
+
+    cmd_res_t onDribbler(const Message&);
+    cmd_res_t onDribblerWrite(const Message&);
 
     static cmd_map_t loadCommandMap();
     static ckw_map_t loadKeywordMap();

@@ -22,6 +22,7 @@ namespace usr {
 
   Coil gCoil(COIL0);
 
+  Dribbler gDrib(DRIB0);
 
   Ticker hwProcTick;
 

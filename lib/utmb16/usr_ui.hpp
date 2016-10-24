@@ -10,7 +10,7 @@
 #define USR_UI_H
 
 #include "mbed.h"
-
+#include "usr_hw.hpp"
 #include "rtx_RGBLed.hpp"
 
 using namespace rtx;

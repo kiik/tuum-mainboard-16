@@ -11,6 +11,7 @@
 
 #include "rtx_MotorController.hpp"
 #include "rtx_Coil.hpp"
+#include "rtx_Dribbler.hpp"
 #include "usr_pins.hpp"
 
 using namespace rtx;
@@ -20,6 +21,8 @@ namespace usr {
   extern MotorController* gMotors[MOTOR_COUNT];
 
   extern Coil gCoil;
+
+  extern Dribbler gDrib;
 
   void hw_init();
   void hw_process();

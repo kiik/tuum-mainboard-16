@@ -36,6 +36,9 @@ namespace usr {
     out["kick"] = ECMD_KICK;
     out["chrg"] = ECMD_CHARGE;
 
+    out["drb"] = ECMD_Dribbler;
+    out["drbwr"] = ECMD_DribblerWrite;
+
     return out;
   }
 
@@ -130,6 +133,10 @@ namespace usr {
         return onCharge(msg);
       case ECMD_KICK:
         return onKick(msg);
+      case ECMD_Dribbler:
+        return onDribbler(msg);
+      case ECMD_DribblerWrite:
+        return onDribblerWrite(msg);
       default:
         return CRES_NoCmd;
     }
@@ -270,6 +277,18 @@ namespace usr {
   Comm::cmd_res_t Comm::onKick(const Message& msg) {
     gCoil.startKick();
     return CRES_OK;
+  }
+
+  Comm::cmd_res_t Comm::onDribbler(const Message& msg) {
+    gDrib.setPower(atof(msg.argv[1]));
+    return CRES_OK;
+
+  }
+
+  Comm::cmd_res_t Comm::onDribblerWrite(const Message& msg) {
+    gDrib.write(atof(msg.argv[1]));
+    return CRES_OK;
+
   }
 
 }

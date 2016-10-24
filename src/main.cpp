@@ -42,103 +42,28 @@ void debug_print() {
   }
 }
 
-namespace app {
-
-  PinName C_DONE = P1_29, C_CHARGE = P0_10, C_KICK = P0_11;
-
-  DigitalOut CHARGE(C_CHARGE), KICK(C_KICK);
-  DigitalIn DONE(C_DONE);
-
-  bool charge_done = true, kick_done = true;
-  Timer coilTimeout;
-
-  size_t chargeMxPeriod = 5000;
-
-  void charge() {
-    coilTimeout.reset();
-    charge_done = false;
-  }
-
-  void kick() {
-    kick_done = false;
-  }
-
-  bool is_done() {
-    return (DONE.read() == L);
-  }
-
-  void do_charge() {
-    if(coilTimeout.read_ms() > chargeMxPeriod) {
-      charge_done = true;
-      CHARGE = L;
-      return;
-    }
-
-    if(!is_done()) {
-      CHARGE = H;
-    } else {
-      CHARGE = L;
-      charge_done = true;
-    }
-  }
-
-  void do_kick() {
-    KICK = H;
-    wait_ms(5);
-    KICK = L;
-    kick_done = true;
-  }
-
-  void init() {
-    KICK = L;
-    CHARGE = L;
-  }
-
-  void setup() {
-
-  }
-
-  void process() {
-    if(!charge_done) {
-      do_charge();
-    } else {
-      if(!kick_done) {
-        do_kick();
-      }
-    }
-
-    if(!is_done()) {
-      usr::UI::mL1.write(1.0, 0.0, 0.0); // Not DONE = RED
-    } else {
-      usr::UI::mL1.write(0.0, 1.0, 0.0); // DONE = GREEN
-    }
-  }
-
-}
-
 int main() {
   usr::hw_init();
-  app::init();
 
   gLogger.printf("Tuum-Mainboard-16_mbed v0.0.1\n");
 
-  usr::UI::setup();
+  usr:UI::setup();
 
   gComm.setup();
 
   mot = usr::gMotors[0];
 
   //omniDrive(5,0,10);
+  gDrib.setPower(0.6);
 
   updTmr.start();
 
-  app::setup();
-
   while(1) {
-    app::process();
-    //debug_print();
 
     gComm.process();
+
+    gDrib.process();
+
     usr::UI::process();
   }
 }
