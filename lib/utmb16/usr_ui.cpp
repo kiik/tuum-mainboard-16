@@ -42,6 +42,11 @@ namespace usr {
   void UI::process() {
     uiStatusPulse.process();
 
+    if(!gCoil.isDone())
+      mL1.write(1.0, 0.0, 0.0);
+    else
+      mL1.write(0.0, 1.0, 0.0);
+
     switch(st) {
       case INIT:
         if(tmr.read_ms() >= 2500) {

@@ -12,6 +12,7 @@
 #include "rtx_logger.hpp"
 #include "rtx_PID.hpp"
 #include "rtx_MotorController.hpp"
+#include "rtx_Coil.hpp"
 
 #include "usr_hw.hpp"
 #include "usr_Comm.hpp"
@@ -262,12 +263,12 @@ namespace usr {
   }
 
   Comm::cmd_res_t Comm::onCharge(const Message& msg) {
-    app::charge();
+    gCoil.startCharge();
     return CRES_OK;
   }
 
   Comm::cmd_res_t Comm::onKick(const Message& msg) {
-    app::kick();
+    gCoil.startKick();
     return CRES_OK;
   }
 

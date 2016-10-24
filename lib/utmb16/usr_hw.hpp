@@ -10,7 +10,7 @@
 #define USR_HW_H
 
 #include "rtx_MotorController.hpp"
-
+#include "rtx_Coil.hpp"
 #include "usr_pins.hpp"
 
 using namespace rtx;
@@ -18,6 +18,8 @@ using namespace rtx;
 namespace usr {
 
   extern MotorController* gMotors[MOTOR_COUNT];
+
+  extern Coil gCoil;
 
   void hw_init();
   void hw_process();

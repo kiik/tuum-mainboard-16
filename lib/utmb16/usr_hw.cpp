@@ -20,6 +20,9 @@ namespace usr {
 
   MotorController* gMotors[MOTOR_COUNT];
 
+  Coil gCoil(COIL0);
+
+
   Ticker hwProcTick;
 
   void hw_init() {
