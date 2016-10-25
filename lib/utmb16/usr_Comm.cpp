@@ -281,13 +281,13 @@ namespace usr {
 
   Comm::cmd_res_t Comm::onDribble(const Message& msg) {
     if(msg.argc < 2) return CRES_ERR;
-    gDribbler.setPower(atof(msg.argv[0]));
+    gDribbler.setPower(atof(msg.argv[1]));
     return CRES_OK;
   }
 
   Comm::cmd_res_t Comm::onDrbWrite(const Message& msg) {
     if(msg.argc < 2) return CRES_ERR;
-    gDribbler.writePower(atof(msg.argv[0]));
+    gDribbler.write(atof(msg.argv[1]));
     return CRES_OK;
   }
 

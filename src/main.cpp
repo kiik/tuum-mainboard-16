@@ -54,15 +54,12 @@ int main() {
   mot = usr::gMotors[0];
 
   //omniDrive(5,0,10);
-  gDrib.setPower(0.6);
 
   updTmr.start();
 
   while(1) {
-
+    gDribbler.process();
     gComm.process();
-
-    gDrib.process();
 
     usr::UI::process();
   }
