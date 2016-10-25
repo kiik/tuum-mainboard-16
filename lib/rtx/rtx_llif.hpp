@@ -16,7 +16,7 @@ namespace rtx {
   struct rgb_pin_t { PinName R, G, B; };
   struct motor_pin_t { PinName PWM, D1, D2, EA, EB, FLT; };
   struct coil_pin_t { PinName CHARGE, KICK, DONE; };
-  struct drib_pin_t { PinName PWM; };
+  struct dribbler_pin_t { PinName PWM; };
 
 }
 

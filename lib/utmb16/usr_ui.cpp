@@ -7,7 +7,7 @@
  */
 
 #include "usr_pins.hpp"
-
+#include "usr_hw.hpp"
 #include "usr_ui.hpp"
 
 namespace usr {

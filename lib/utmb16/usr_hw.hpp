@@ -10,6 +10,7 @@
 #define USR_HW_H
 
 #include "rtx_MotorController.hpp"
+#include "rtx_Dribbler.hpp"
 #include "rtx_Coil.hpp"
 #include "rtx_Dribbler.hpp"
 #include "usr_pins.hpp"
@@ -21,6 +22,7 @@ namespace usr {
   extern MotorController* gMotors[MOTOR_COUNT];
 
   extern Coil gCoil;
+  extern Dribbler gDribbler;
 
   extern Dribbler gDrib;
 

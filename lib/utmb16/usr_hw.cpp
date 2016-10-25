@@ -21,8 +21,9 @@ namespace usr {
   MotorController* gMotors[MOTOR_COUNT];
 
   Coil gCoil(COIL0);
+  Dribbler gDribbler(DRB0);
 
-  Dribbler gDrib(DRIB0);
+  Dribbler gDrib(DRB0);
 
   Ticker hwProcTick;
 

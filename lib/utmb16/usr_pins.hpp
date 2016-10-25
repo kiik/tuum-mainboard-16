@@ -28,8 +28,7 @@ namespace usr {
   static const motor_pin_t* MOTN[MOTOR_COUNT] = {&MOT0, &MOT1, &MOT2, &MOT3};
 
   static const coil_pin_t COIL0 = {P1_29, P0_10, P0_11};
-
-  static const drib_pin_t DRIB0 = {P2_5};
+  static const dribbler_pin_t DRB0 = {P2_5};
 
 }
 

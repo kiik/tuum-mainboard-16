@@ -36,8 +36,8 @@ namespace usr {
     out["kick"] = ECMD_KICK;
     out["chrg"] = ECMD_CHARGE;
 
-    out["drb"] = ECMD_Dribbler;
-    out["drbwr"] = ECMD_DribblerWrite;
+    out["dr"] = ECMD_Dribble;
+    out["drw"] = ECMD_DrbWrite;
 
     return out;
   }
@@ -133,10 +133,10 @@ namespace usr {
         return onCharge(msg);
       case ECMD_KICK:
         return onKick(msg);
-      case ECMD_Dribbler:
-        return onDribbler(msg);
-      case ECMD_DribblerWrite:
-        return onDribblerWrite(msg);
+     case ECMD_Dribble:
+        return onDribble(msg);
+      case ECMD_DrbWrite:
+        return onDrbWrite(msg);
       default:
         return CRES_NoCmd;
     }
@@ -279,16 +279,16 @@ namespace usr {
     return CRES_OK;
   }
 
-  Comm::cmd_res_t Comm::onDribbler(const Message& msg) {
-    gDrib.setPower(atof(msg.argv[1]));
+  Comm::cmd_res_t Comm::onDribble(const Message& msg) {
+    if(msg.argc < 2) return CRES_ERR;
+    gDribbler.setPower(atof(msg.argv[0]));
     return CRES_OK;
-
   }
 
-  Comm::cmd_res_t Comm::onDribblerWrite(const Message& msg) {
-    gDrib.write(atof(msg.argv[1]));
+  Comm::cmd_res_t Comm::onDrbWrite(const Message& msg) {
+    if(msg.argc < 2) return CRES_ERR;
+    gDribbler.writePower(atof(msg.argv[0]));
     return CRES_OK;
-
   }
 
 }

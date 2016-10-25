@@ -1,5 +1,5 @@
-#ifndef RTX_DRIB_H
-#define RTX_DRIB_H
+#ifndef RTX_DRB_H
+#define RTX_DRB_H
 
 #include "rtx_llif.hpp"
 
@@ -8,11 +8,12 @@ namespace rtx {
   class Dribbler
   {
   public:
-    Dribbler(drib_pin_t);
+    Dribbler(dribbler_pin_t);
 
     void process();
 
     void setPower(float);
+    void writePower(float);
 
     void write(float);
 
@@ -22,7 +23,6 @@ namespace rtx {
 
     Timer mWarmupTmr;
     bool m_warmup;
-
   };
 
 }
