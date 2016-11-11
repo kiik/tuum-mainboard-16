@@ -53,7 +53,7 @@ namespace rtx {
     static int parseCommand(char*, Message&);
 
   private:
-    static int validate(const std::string&);
+    static int validate(std::string&);
 
     static int parseIds(const std::string&, Message&);
     static int parseArgs(const std::string&, Message&);

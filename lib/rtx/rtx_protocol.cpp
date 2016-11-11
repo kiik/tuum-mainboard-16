@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <string.h>
 
+#include "rtx_logger.hpp"
 #include "rtx_protocol.hpp"
 
 namespace rtx {
@@ -45,42 +46,60 @@ namespace rtx {
     return 0;
   }
 
-  int Protocol::validate(const std::string& in) {
-    size_t os, os2;
+  int Protocol::validate(std::string& in) {
+    size_t os, os1, os2;
 
-    os = in.find(PACKET_BEGIN);
+    // <1:om,12345,12345,12345,12345>
+    // <1:x>
+    if(in.size() > 60) return INV_PACKET;
+    if(in.size() < 5) return INV_PACKET;
+
+    os = in.find(PACKET_BEGIN);  // <
     if(os == std::string::npos) return INV_PACKET;
 
-    os = in.find(PACKET_ID_END, os+2);
-    if(os == std::string::npos) return INV_ID;
+    os1 = in.find(PACKET_ID_END, os+2); // :
+    if(os1 == std::string::npos) return INV_ID;
 
-    os2 = in.find(PACKET_END, os+2);
+    // <:
+    if(os1 <= (os + 1)) return INV_ID;
+
+    os2 = in.find(PACKET_END, os1+2); // >
     if(os2 == std::string::npos) return INV_PARAM;
+
+    size_t begin = in.find(PACKET_BEGIN),
+           end = in.find(PACKET_END, begin+2);
+    in = in.substr(begin, end - begin + 1);
 
     return 0;
   }
 
   int Protocol::parseIds(const std::string& in, Message& out) {
     size_t os1 = in.find(PACKET_BEGIN), os2 = in.find(PACKET_ID_END);
-    size_t os3 = in.find(PACKET_PDELIM);
+    //size_t os3 = in.find(PACKET_PDELIM); // ,
 
+    out.id = in.substr(os1 + 1, os2 - os1 - 1);
+
+    /*
     if((os3 == std::string::npos) || (os3 > os2)) {
-      out.id = in.substr(os1 + 1, os2 - os1 - 1);
     } else {
       out.id = in.substr(os1 + 1, os3 - os1 - 1);
       out.sId = in.substr(os3 + 1, os2 - os3 - 1);
-    }
+    }*/
 
     return 0;
   }
 
   int Protocol::parseArgs(const std::string& in, Message& out) {
+
+    // <1:om>1:om,0,0,0>
+
     int os1 = in.find(PACKET_ID_END), os2, os3 = in.find(PACKET_END);
 
-    out.argc = std::count(in.begin(), in.end(), *PACKET_PDELIM) + 1;
+    out.argc = std::count(in.begin() + os1, in.end(), *PACKET_PDELIM) + 1;
     if(out.argc == 0) return -1;
 
-    if(out.sId != "") out.argc--;
+    //if(out.sId != "") out.argc--;
+
     out.argv = new char*[out.argc];
 
     int n = 0;
