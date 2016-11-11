@@ -13,7 +13,9 @@ namespace rtx {
     void process();
 
     void startCharge();
+
     void startKick();
+    void startKick(size_t T);
 
     bool isDone();
 
@@ -27,7 +29,7 @@ namespace rtx {
     Timer coilTimeout;
 
     bool m_charged, m_kicked;
-    size_t m_charge_mx_period;
+    size_t m_charge_mx_period, m_kick_length;
   };
 
 }
