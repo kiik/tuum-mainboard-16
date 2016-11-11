@@ -25,9 +25,13 @@ namespace rtx {
 
   void Comm::process() {
     if(rtx::llb::read(buf, blen) >= 0) {
-      if(buf) handleMessage(buf);
+      if(buf) {
+        gLogger.printf("\n%s\n", buf);
 
-      delete(buf);
+        handleMessage(buf);
+        delete(buf);
+      }
+
       buf = NULL;
       blen = 0;
     }
