@@ -9,7 +9,13 @@
 #ifndef RTX_LLBUS_H
 #define RTX_LLBUS_H
 
-#include "mbed.h"
+#include <mbed.h>
+#include <USBSerial.h>
+
+#define llbus_t erial
+
+//#define llbus_decl() USBSerial gBus
+#define llbus_decl() Serial gBus(USBTX, USBRX)
 
 namespace rtx { namespace llb {
 
@@ -60,27 +66,36 @@ namespace rtx { namespace llb {
 
     int read(char*& out, size_t& len) {
       if(avail_ix >= PCKBUF_N) return -1;
+      int res = 0;
 
       bf_lock = avail_ix;
 
       char* bf = buf[avail_ix];
       len = strlen(bf);
+
+      if(len < 5) {
+        len = 0;
+        res = -2;
+        goto SKIP;
+      }
+
       out = new char[len];
       strcpy(out, bf);
 
+SKIP:
       size_t ix = (avail_ix + 1) % PCKBUF_N;
       if(ix != buf_seq) avail_ix = ix;
       else avail_ix = PCKBUF_N;
 
       bf_lock = PCKBUF_N;
 
-      return 0;
+      return res;
     }
 
   };
 
 
-  extern Serial gBus;
+  extern llbus_t gBus;
 
   void setup();
 

@@ -12,7 +12,7 @@
 
 namespace rtx { namespace llb {
 
-  Serial gBus(USBTX, USBRX);
+  llbus_decl();
 
   packet_buf_t dataBuffer;
 
@@ -25,7 +25,10 @@ namespace rtx { namespace llb {
   }
 
   int read(char*& out, size_t& len) {
-    return dataBuffer.read(out, len);
+    //__disable_irq();
+    int res = dataBuffer.read(out, len);
+    //__enable_irq();
+    return res;
   }
 
   int write(char* in, size_t len) {

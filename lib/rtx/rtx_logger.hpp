@@ -9,7 +9,9 @@
 #ifndef RTX_LOG_H
 #define RTX_LOG_H
 
-#include "mbed.h"
+#include <mbed.h>
+
+#include "rtx_llbus.hpp"
 
 namespace rtx {
 
@@ -18,7 +20,7 @@ namespace rtx {
   public:
     Logger();
 
-    Serial* getHandle();
+    llbus_t* getHandle();
 
   };
 

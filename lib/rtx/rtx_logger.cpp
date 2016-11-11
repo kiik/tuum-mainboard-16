@@ -16,7 +16,7 @@ namespace rtx {
 
   }
 
-  Serial* Logger::getHandle() { return &llb::gBus; }
+  llbus_t* Logger::getHandle() { return &llb::gBus; }
 
   Logger logger;
 
