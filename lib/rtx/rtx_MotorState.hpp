@@ -39,7 +39,13 @@ namespace rtx {
     int32_t deltaPos();
     float deltaDegree();
 
+    void lock();
+    void unlock();
+    bool isLocked();
+
   private:
+    volatile bool locked;
+
     PwmOut OUT;
     DigitalOut D1, D2;
     InterruptIn EA, EB;

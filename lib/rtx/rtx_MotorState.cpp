@@ -34,8 +34,11 @@ namespace rtx {
   }
 
   void MotorState::setPower(float p) {
+    if(isLocked()) return;
+    lock();
     OUT.write(p);
     lpw = p;
+    unlock();
   }
 
   void MotorState::setDirection(dir_t d) {
@@ -91,6 +94,18 @@ namespace rtx {
 
   float MotorState::deltaDegree() {
     return deltaPos() / 1200.0 * 360;
+  }
+
+  void MotorState::lock() {
+    locked = true;
+  }
+
+  void MotorState::unlock() {
+    locked = false;
+  }
+
+  bool MotorState::isLocked() {
+    return locked == true;
   }
 
 }
