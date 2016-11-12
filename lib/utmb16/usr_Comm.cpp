@@ -62,7 +62,6 @@ namespace usr {
     cmd_map_t::const_iterator it;
     for(it = Comm::cmdIdMap.begin();it != Comm::cmdIdMap.end(); ++it) {
       if(it->first == in) {
-        gLogger.printf("DBG:%s,%s,%i\n", in, it->first.c_str(), (it->first == in));
         return it->second;
       }
     }
@@ -73,7 +72,6 @@ namespace usr {
     ckw_map_t::const_iterator it;
     for(it = Comm::cmdKwMap.begin();it != Comm::cmdKwMap.end(); ++it)
       if(it->first == in) {
-        gLogger.printf("DBG:%s\n", it->first.c_str());
         return it->second;
       }
     return EKW_None;
@@ -153,13 +151,13 @@ namespace usr {
         break;
       case CRES_OK:
         msg_ack(msg);
-        msg_debug(msg);
+        // msg_debug(msg);
         break;
       case CRES_None:
         break;
       case CRES_ERR:
         msg_err(msg);
-        msg_debug(msg);
+        // msg_debug(msg);
         break;
       case CRES_DONE:
         break;
@@ -275,7 +273,12 @@ namespace usr {
   }
 
   Comm::cmd_res_t Comm::onKick(const Message& msg) {
-    gCoil.startKick();
+    if(msg.argc == 2) {
+      gCoil.startKick(atoi(msg.argv[1]));
+    } else {
+      gCoil.startKick();
+    }
+
     return CRES_OK;
   }
 

@@ -26,44 +26,49 @@ using namespace usr;
 
 usr::Comm gComm;
 
-#define H 1
-#define L 0
-
 Timer updTmr;
 
 MotorController* mot;
 PID* pid;
 
+unsigned long  heapSize()
+{
+  char   stackVariable;
+  void   *heap;
+  unsigned long result;
+  heap  = malloc(4);
+  result  = (unsigned long)(&stackVariable) - (unsigned long)heap;
+  free(heap);
+  return result;
+}
+
 void debug_print() {
   if(updTmr.read_ms() > 1000) {
+    /*
     gLogger.printf("\nSpeed = %.2f deg/s. PWM: %.4f. pidv = %.2f, err = %.4f.\n", mot->getSpeed(), mot->getPWMValue(), mot->getPIDValue(), mot->getErr());
     gLogger.printf("PID: p=%.2f, i=%.2f, d=%.2f\n", pid->_p(), pid->_i(), pid->_d());
+    */
+    gLogger.printf("mem:%lu\n", heapSize());
     updTmr.reset();
   }
 }
 
 int main() {
+  updTmr.start();
   usr::hw_init();
 
   gLogger.printf("Tuum-Mainboard-16_mbed v0.0.1\n");
 
   usr:UI::setup();
-
   gComm.setup();
 
-  mot = usr::gMotors[0];
-
-  //omniDrive(5,0,10);
-  gDrib.setPower(0.6);
-
-  updTmr.start();
-
   while(1) {
-
     gComm.process();
 
     gDrib.process();
+    gCoil.process();
 
     usr::UI::process();
+    //debug_print();
   }
 }

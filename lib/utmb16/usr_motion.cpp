@@ -1,4 +1,5 @@
 
+#include "rtx_logger.hpp"
 #include "usr_hw.hpp"
 #include "usr_motion.hpp"
 
@@ -14,11 +15,13 @@ namespace usr {
   void timeout();
 
   void set_speed(mot_speed_t vs) {
+    timeoutTick.detach();
     for(int i=0; i < MOTOR_COUNT; i++) { gMotors[i]->setSpeed(vs[i]); }
     timeoutTick.attach_us(timeout, 1000 * 1000);
   }
 
   void omniDrive(float spd, float dir, float rot) {
+    gLogger.printf("dbg:%.2f, %.2f, %.2f\n", spd, dir, rot);
     float v = spd / MOTOR_CMS_TO_DGS;
     float rot_v = rot * ROBOT_RADIUS / WHEEL_RADIUS;
     float rad = dir * M_PI/180;
