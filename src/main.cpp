@@ -67,7 +67,6 @@ int main() {
 
     gDrib.process();
     gCoil.process();
-
     usr::UI::process();
     //debug_print();
   }

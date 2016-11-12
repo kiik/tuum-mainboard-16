@@ -24,8 +24,6 @@ namespace usr {
   extern Coil gCoil;
   extern Dribbler gDribbler;
 
-  extern Dribbler gDrib;
-
   void hw_init();
   void hw_process();
 
