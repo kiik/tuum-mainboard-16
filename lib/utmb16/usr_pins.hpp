@@ -29,6 +29,7 @@ namespace usr {
 
   static const coil_pin_t COIL0 = {P0_10, P0_11, P1_29};
   static const dribbler_pin_t DRB0 = {P2_5};
+  static const ballsensor_pin_t BL0 = {P1_30};
 
 }
 

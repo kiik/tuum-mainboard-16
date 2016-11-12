@@ -23,7 +23,7 @@ namespace usr {
   Coil gCoil(COIL0);
   Dribbler gDribbler(DRB0);
 
-  Dribbler gDrib(DRB0);
+  BallSensor gSensor(BL0);
 
   Ticker hwProcTick;
 

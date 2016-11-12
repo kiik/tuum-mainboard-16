@@ -17,6 +17,7 @@ namespace rtx {
   struct motor_pin_t { PinName PWM, D1, D2, EA, EB, FLT; };
   struct coil_pin_t { PinName CHARGE, KICK, DONE; };
   struct dribbler_pin_t { PinName PWM; };
+  struct ballsensor_pin_t { PinName BLS; };
 
 }
 

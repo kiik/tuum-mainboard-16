@@ -13,7 +13,6 @@ namespace rtx {
     void process();
 
     void setPower(float);
-    void writePower(float);
 
     void write(float);
 

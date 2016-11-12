@@ -22,7 +22,6 @@ namespace rtx {
   void Dribbler::process() {
     if(m_warmup) {
       if(mWarmupTmr.read_ms() >= DRB_WARM_T) {
-        writePower(m_pwr);
         m_warmup = false;
         mWarmupTmr.stop();
       }
@@ -39,10 +38,6 @@ namespace rtx {
       return;
     }
 
-    writePower(pwr);
-  }
-
-  void Dribbler::writePower(float pwr) {
     mOut = DRB_MIN + DRB_SPN * pwr;
     m_pwr = pwr;
   }

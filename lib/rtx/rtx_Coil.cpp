@@ -25,10 +25,6 @@ namespace rtx {
     m_charged = false;
   }
 
-  void Coil::startKick() {
-    startKick(5);
-  }
-
   void Coil::startKick(size_t t) {
     m_kick_length = t;
     mCharge = L;

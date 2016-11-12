@@ -5,8 +5,7 @@
 
 namespace rtx {
 
-  class Coil
-  {
+  class Coil {
   public:
     Coil(coil_pin_t);
 
@@ -14,8 +13,7 @@ namespace rtx {
 
     void startCharge();
 
-    void startKick();
-    void startKick(size_t T);
+    void startKick(size_t = 5);
 
     bool isDone();
 

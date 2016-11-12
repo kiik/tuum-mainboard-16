@@ -65,8 +65,9 @@ int main() {
   while(1) {
     gComm.process();
 
-    gDrib.process();
+    gDribbler.process();
     gCoil.process();
+
     usr::UI::process();
     //debug_print();
   }
