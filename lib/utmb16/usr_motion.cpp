@@ -21,14 +21,13 @@ namespace usr {
   }
 
   void omniDrive(float spd, float dir, float rot) {
-    gLogger.printf("dbg:%.2f, %.2f, %.2f\n", spd, dir, rot);
     float v = spd / MOTOR_CMS_TO_DGS;
     float rot_v = rot * ROBOT_RADIUS / WHEEL_RADIUS;
     float rad = dir * M_PI/180;
 
     mot_speed_t vs;
-    vs[0] = v * -sin(MOTOR_ANGLE - dir) - rot_v;
-    vs[1] = v * -sin(MOTOR_ANGLE + dir) - rot_v;
+    vs[0] = v * -sin(MOTOR_ANGLE + dir) - rot_v;
+    vs[1] = v * -sin(MOTOR_ANGLE - dir) - rot_v;
     vs[2] = v * sin(MOTOR_ANGLE + dir) - rot_v;
     vs[3] = v * sin(MOTOR_ANGLE - dir) - rot_v;
 
