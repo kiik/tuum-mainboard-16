@@ -26,10 +26,10 @@ namespace usr {
     float rad = dir * M_PI/180;
 
     mot_speed_t vs;
-    vs[0] = v * -sin(MOTOR_ANGLE + dir) - rot_v;
-    vs[1] = v * -sin(MOTOR_ANGLE - dir) - rot_v;
-    vs[2] = v * sin(MOTOR_ANGLE + dir) - rot_v;
-    vs[3] = v * sin(MOTOR_ANGLE - dir) - rot_v;
+    vs[0] = v * -sin(MOTOR_ANGLE - dir) - rot_v;
+    vs[1] = v * -sin(MOTOR_ANGLE + dir) - rot_v;
+    vs[2] = v * sin(MOTOR_ANGLE - dir) - rot_v;
+    vs[3] = v * sin(MOTOR_ANGLE + dir) - rot_v;
 
     set_speed(vs);
   }
