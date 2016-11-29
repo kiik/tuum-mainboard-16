@@ -29,6 +29,8 @@ namespace rtx {
   }
 
   void Dribbler::setPower(float pwr) {
+    if(m_pwr == pwr) return;
+
     if(m_pwr == 0.0) {
       m_warmup = true;
       mWarmupTmr.reset();
