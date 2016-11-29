@@ -299,7 +299,7 @@ namespace usr {
   }
 
   Comm::cmd_res_t Comm::onBallSensor(const Message& msg) {
-    gLogger.printf("<1:BallSensor,%i>\n", gSensor.getBallSensor());
+    gLogger.printf("1:bl, %i>\n", gSensor.getBallSensor());
     return CRES_OK;
   }
 

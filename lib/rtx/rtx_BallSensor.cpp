@@ -16,7 +16,7 @@ namespace rtx {
   }
 
   bool BallSensor::getBallSensor() {
-    return (mBallSensor == L);
+    return (mBallSensor == H);
   }
 
 }
