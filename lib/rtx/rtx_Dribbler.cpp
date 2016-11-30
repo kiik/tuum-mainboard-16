@@ -8,6 +8,7 @@ namespace rtx {
   const float DRB_MIN = 0.05;
   const float DRB_SPN = DRB_MAX - DRB_MIN;
   const float DRB_WARM = 0.058;
+  const float DRB_WARM2 = 0.2;
 
   const size_t DRB_WARM_T = 1000;
 
@@ -39,6 +40,15 @@ namespace rtx {
       m_pwr = pwr;
       return;
     }
+
+    /**if(m_pwr < 0.2) {
+      m_warmup = true;
+      mWarmupTmr.reset();
+      mWarmupTmr.start();
+      write(DRB_WARM2);
+      m_pwr = pwr;
+      return;
+    }*/
 
     mOut = DRB_MIN + DRB_SPN * pwr;
     m_pwr = pwr;

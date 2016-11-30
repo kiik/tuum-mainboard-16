@@ -8,7 +8,7 @@ namespace rtx {
 
     void process();
 
-    bool getBallSensor();
+    bool bl();
 
   private:
     DigitalIn mBallSensor;
