@@ -41,6 +41,9 @@ namespace usr {
 
     out["bl"] = ECMD_BallSensor;
 
+    out["sw"] = ECMD_Switch;
+    out["gsw"] = ECMD_getSwitch;
+
     return out;
   }
 
@@ -139,6 +142,10 @@ namespace usr {
         return onDrbWrite(msg);
     case ECMD_BallSensor:
         return onBallSensor(msg);
+    case ECMD_Switch:
+        return onSwitch(msg);
+    case ECMD_getSwitch:
+        return onGetSwitch(msg);
       default:
         return CRES_NoCmd;
     }
@@ -300,6 +307,17 @@ namespace usr {
 
   Comm::cmd_res_t Comm::onBallSensor(const Message& msg) {
     gLogger.printf("<1:bl,%i>\n", gSensor.bl());
+    return CRES_None;
+  }
+
+  Comm::cmd_res_t Comm::onSwitch(const Message& msg) {
+    gSwitch.process();
+    return CRES_None;
+  }
+
+  Comm::cmd_res_t Comm::onGetSwitch(const Message& msg) {
+    if(msg.argc < 2) return CRES_ERR;
+    gLogger.printf("<1:gsw,%i,%i>\n",atoi(msg.argv[1]),gSwitch.getSwitch(atoi(msg.argv[1])));
     return CRES_None;
   }
 

@@ -31,6 +31,9 @@ namespace usr {
   static const dribbler_pin_t DRB0 = {P2_5};
   static const ballsensor_pin_t BL0 = {P1_30};
 
+
+  static const switches_pin_t SW = {P1_24, P1_23, P1_22, P1_21};
+
 }
 
 #endif

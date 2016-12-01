@@ -52,6 +52,9 @@ namespace usr {
       ECMD_DrbWrite,
 
       ECMD_BallSensor,
+
+      ECMD_Switch,
+      ECMD_getSwitch
     };
 
     enum cmd_kw_t {
@@ -94,6 +97,8 @@ namespace usr {
     cmd_res_t onDribble(const Message&);
     cmd_res_t onDrbWrite(const Message&);
     cmd_res_t onBallSensor(const Message&);
+    cmd_res_t onSwitch(const Message&);
+    cmd_res_t onGetSwitch(const Message&);
 
     static cmd_map_t loadCommandMap();
     static ckw_map_t loadKeywordMap();

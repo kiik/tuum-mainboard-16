@@ -14,6 +14,7 @@
 #include "rtx_Coil.hpp"
 #include "rtx_Dribbler.hpp"
 #include "rtx_BallSensor.hpp"
+#include "rtx_SwitchInterface.hpp"
 #include "usr_pins.hpp"
 
 using namespace rtx;
@@ -25,6 +26,7 @@ namespace usr {
   extern Coil gCoil;
   extern Dribbler gDribbler;
   extern BallSensor gSensor;
+  extern SwitchInterface gSwitch;
 
   void hw_init();
   void hw_process();

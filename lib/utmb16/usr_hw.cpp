@@ -25,6 +25,8 @@ namespace usr {
 
   BallSensor gSensor(BL0);
 
+  SwitchInterface gSwitch(SW);
+
   Ticker hwProcTick;
 
   void hw_init() {
