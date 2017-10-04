@@ -10,12 +10,12 @@
 #define RTX_LLBUS_H
 
 #include <mbed.h>
-#include <USBSerial.h>
+// #include <USBSerial.h>
 
-#define llbus_t USBSerial
+#define llbus_t Serial
 
-#define llbus_decl() USBSerial gBus
-//#define llbus_decl() Serial gBus(USBTX, USBRX)
+// #define llbus_decl() USBSerial gBus
+#define llbus_decl() Serial gBus(USBTX, USBRX)
 
 namespace rtx { namespace llb {
 
