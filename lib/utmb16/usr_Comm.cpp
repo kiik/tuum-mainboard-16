@@ -88,6 +88,12 @@ namespace usr {
     gLogger.printf("%s\n", buf.str().c_str());
   }
 
+  void msg_void(const Message& msg) {
+    std::stringstream buf;
+    buf << "<1:VOID," << msg.id.c_str() << ',' << msg.argc << '>';
+    gLogger.printf("%s\n", buf.str().c_str());
+  }
+
   void msg_err(const Message& msg) {
     std::stringstream buf;
     buf << "<1:ERR," << msg.id.c_str() << ',' << msg.argc << '>';
@@ -108,7 +114,7 @@ namespace usr {
   void msg_debug(const Message& msg) {
     std::stringstream buf;
 
-    buf << "<1:ARG";
+    buf << "<1:DBG," << msg.id;
     for(size_t i = 0; i < msg.argc; i++)
       buf << ',' << msg.argv[i];
     buf << '>';
@@ -156,21 +162,24 @@ namespace usr {
     cmd_id_t cId = getCommandId(msg.argv[0]);
     cmd_res_t res = callback(cId, msg);
 
+    msg_debug(msg);
+
     switch(res) {
       case CRES_NoCmd:
         msg_nocmd(msg);
         break;
       case CRES_OK:
         msg_ack(msg);
-        // msg_debug(msg);
-        break;
-      case CRES_None:
         break;
       case CRES_ERR:
         msg_err(msg);
-        // msg_debug(msg);
         break;
       case CRES_DONE:
+        msg_ack(msg);
+        break;
+      case CRES_None:
+      default:
+        msg_void(msg);
         break;
     }
   }
