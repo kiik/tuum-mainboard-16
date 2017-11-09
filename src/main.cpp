@@ -16,12 +16,7 @@
 #include "usr_hw.hpp"
 #include "usr_motion.hpp"
 
-<<<<<<< Updated upstream
 #include "usr_Comm.hpp"
-=======
-#include <iostream>
-#include <time.h>
->>>>>>> Stashed changes
 
 #include "app.hpp"
 
@@ -76,19 +71,12 @@ void debug_prxint() {
    
     gLogger.printf("\nSpeed = %.2f deg/s. PWM: %.4f. pidv = %.2f, err = %.4f.\n", mot->getSpeed(), mot->getPWMValue(), mot->getPIDValue(), mot->getErr());
     gLogger.printf("PID: p=%.2f, i=%.2f, d=%.2f\n", pid->_p(), pid->_i(), pid->_d());
-<<<<<<< Updated upstream
-    */
     //gLogger.printf("mem:%lu\n", heapSize());
-=======
-   
-    gLogger.printf("mem:%lu\n", heapSize());
->>>>>>> Stashed changes
     updTmr.reset();
   }
 }
 
 int main() {
-<<<<<<< Updated upstream
 #ifdef TUUM_ETH_EN
   EthernetInterface eth;
 
@@ -98,9 +86,6 @@ int main() {
 
   i = eth.connect();
 #endif
-
-=======
->>>>>>> Stashed changes
 
   updTmr.start();
   usr::hw_init();
@@ -116,15 +101,12 @@ int main() {
 #endif
 
   while(1) {
-<<<<<<< Updated upstream
     if(updTmr.read_ms() > 2000) {
 #ifdef TUUM_ETH_EN
       const char *ip = eth.get_ip_address();
       const char *mac = eth.get_mac_address();
       gLogger.printf("%s, %s\n", ip, mac);
 #endif
-
-      gLogger.printf("PONG\n");
       updTmr.reset();
     }
 
@@ -132,15 +114,9 @@ int main() {
     gComm.process();
 #endif
 
-    //gDribbler.process();
-    //gCoil.process();
-
-=======
-
-    gComm.process();
     gDribbler.process();
     gPitcher.process();
->>>>>>> Stashed changes
+
     usr::UI::process();
   }
 

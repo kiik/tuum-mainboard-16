@@ -54,7 +54,7 @@ namespace rtx {
 		gLogger.printf("[setMotorSpeed]: PWM = %.2f, P=%i\n", pwm_value, percent );
 
 		// Set PWM value as angle
-		m_dribbler->write( pwm_value );
+		m_dribbler->setPower( pwm_value );
 	}
 
 	/**
