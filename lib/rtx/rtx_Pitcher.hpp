@@ -32,7 +32,7 @@ namespace rtx {
 
 			Dribbler *m_dribbler;
 
-			static const float m_min_motor_speed = 0.2;
+			static const float m_min_motor_speed = 0.0;
 			static const float m_max_motor_speed = 1.0;
 
 			static const float m_min_pos = 0.05;
