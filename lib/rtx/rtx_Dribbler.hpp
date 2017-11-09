@@ -5,25 +5,23 @@
 
 namespace rtx {
 
-  class Dribbler
-  {
-  public:
-    Dribbler(dribbler_pin_t);
+	class Dribbler
+	{
+		public:
+			Dribbler(dribbler_pin_t);
 
-    void process();
+			void process();
+			void setPower(float);
+			void write(float);
+			float read();
 
-    void setPower(float);
+		private:
+			PwmOut mOut;
+			float m_pwr;
 
-    void write(float);
-
-  private:
-    PwmOut mOut;
-    float m_pwr;
-
-    Timer mWarmupTmr;
-    bool m_warmup;
-  };
-
+			Timer mWarmupTmr;
+			bool m_warmup;
+	};
 }
 
 #endif
