@@ -20,12 +20,12 @@ namespace usr {
 
   MotorController* gMotors[MOTOR_COUNT];
 
-  Coil gCoil(COIL0);
+  // Coil gCoil(COIL0);
   Dribbler gDribbler(DRB0);
+  Pitcher gPitcher(PTH0, &gDribbler);
 
-  BallSensor gSensor(BL0);
-
-  SwitchInterface gSwitch(SW);
+  // BallSensor gSensor(BL0);
+  // SwitchInterface gSwitch(SW);
 
   Ticker hwProcTick;
 

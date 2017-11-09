@@ -11,9 +11,9 @@
 
 #include "rtx_MotorController.hpp"
 #include "rtx_Dribbler.hpp"
-#include "rtx_Coil.hpp"
-#include "rtx_Dribbler.hpp"
-#include "rtx_BallSensor.hpp"
+// #include "rtx_Coil.hpp"
+#include "rtx_Pitcher.hpp"
+// #include "rtx_BallSensor.hpp"
 #include "rtx_SwitchInterface.hpp"
 #include "usr_pins.hpp"
 
@@ -23,10 +23,11 @@ namespace usr {
 
   extern MotorController* gMotors[MOTOR_COUNT];
 
-  extern Coil gCoil;
+  // extern Coil gCoil;
   extern Dribbler gDribbler;
-  extern BallSensor gSensor;
-  extern SwitchInterface gSwitch;
+  extern Pitcher gPitcher;
+  // extern BallSensor gSensor;
+  // extern SwitchInterface gSwitch;
 
   void hw_init();
   void hw_process();
