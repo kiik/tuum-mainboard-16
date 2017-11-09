@@ -12,7 +12,7 @@
 #include "rtx_logger.hpp"
 #include "rtx_PID.hpp"
 #include "rtx_MotorController.hpp"
-#include "rtx_Coil.hpp"
+// #include "rtx_Coil.hpp"
 
 #include "usr_hw.hpp"
 #include "usr_Comm.hpp"
@@ -33,16 +33,31 @@ namespace usr {
     out["pd"] = ECMD_SetPid;
     out["en"] = ECMD_SetEnc;
 
-    out["kick"] = ECMD_KICK;
-    out["chrg"] = ECMD_CHARGE;
+    // out["kick"] = ECMD_KICK;
+    // out["chrg"] = ECMD_CHARGE;
 
     out["dr"] = ECMD_Dribble;
     out["drw"] = ECMD_DrbWrite;
 
-    out["bl"] = ECMD_BallSensor;
+    // Get pitch angle
+    out["gng"] = ECMD_GetPitchAngle;
 
-    out["sw"] = ECMD_Switch;
-    out["gsw"] = ECMD_getSwitch;
+    // Set pitch angle
+    out["sng"] = ECMD_SetPitchAngle;
+
+    // Get ball status
+    out["gbs"] = ECMD_GetBallStatus;
+
+    // Set motor speed
+    out["sms"] = ECMD_SetMotorSpeed;
+
+    // Get motor status
+    out["gms"] = ECMD_GetMotorSpeed;
+
+    // out["bl"] = ECMD_BallSensor;
+
+    // out["sw"] = ECMD_Switch;
+    // out["gsw"] = ECMD_getSwitch;
 
     return out;
   }
@@ -138,20 +153,35 @@ namespace usr {
         return onSetPid(msg);
       case ECMD_SetEnc:
         return onSetEnc(msg);
-      case ECMD_CHARGE:
-        return onCharge(msg);
-      case ECMD_KICK:
-        return onKick(msg);
-     case ECMD_Dribble:
+      // case ECMD_CHARGE:
+      //   return onCharge(msg);
+      // case ECMD_KICK:
+      //   return onKick(msg);
+      case ECMD_Dribble:
         return onDribble(msg);
       case ECMD_DrbWrite:
         return onDrbWrite(msg);
-    case ECMD_BallSensor:
-        return onBallSensor(msg);
-    case ECMD_Switch:
-        return onSwitch(msg);
-    case ECMD_getSwitch:
-        return onGetSwitch(msg);
+
+      case ECMD_GetPitchAngle:
+        return getPitchAngle(msg);
+      case ECMD_SetPitchAngle:
+        return setPitchAngle(msg);
+
+      case ECMD_GetBallStatus:
+        return getBallStatus(msg);
+
+      case ECMD_GetMotorSpeed:
+        return getMotorSpeed(msg);
+
+      case ECMD_SetMotorSpeed:
+        return setMotorSpeed(msg);
+        
+    // case ECMD_BallSensor:
+    //     return onBallSensor(msg);
+    // case ECMD_Switch:
+    //     return onSwitch(msg);
+    // case ECMD_getSwitch:
+    //     return onGetSwitch(msg);
       default:
         return CRES_NoCmd;
     }
@@ -287,20 +317,20 @@ namespace usr {
     return CRES_OK;
   }
 
-  Comm::cmd_res_t Comm::onCharge(const Message& msg) {
-    gCoil.startCharge();
-    return CRES_OK;
-  }
+  // Comm::cmd_res_t Comm::onCharge(const Message& msg) {
+  //   gCoil.startCharge();
+  //   return CRES_OK;
+  // }
 
-  Comm::cmd_res_t Comm::onKick(const Message& msg) {
-    if(msg.argc == 2) {
-      gCoil.startKick(atoi(msg.argv[1]));
-    } else {
-      gCoil.startKick();
-    }
+  // Comm::cmd_res_t Comm::onKick(const Message& msg) {
+  //   if(msg.argc == 2) {
+  //     gCoil.startKick(atoi(msg.argv[1]));
+  //   } else {
+  //     gCoil.startKick();
+  //   }
 
-    return CRES_OK;
-  }
+  //   return CRES_OK;
+  // }
 
   Comm::cmd_res_t Comm::onDribble(const Message& msg) {
     if(msg.argc < 2) return CRES_ERR;
@@ -314,20 +344,71 @@ namespace usr {
     return CRES_OK;
   }
 
-  Comm::cmd_res_t Comm::onBallSensor(const Message& msg) {
-    gLogger.printf("<1:bl,%i>\n", gSensor.bl());
-    return CRES_None;
-  }
-
-  Comm::cmd_res_t Comm::onSwitch(const Message& msg) {
-    gSwitch.process();
-    return CRES_None;
-  }
-
-  Comm::cmd_res_t Comm::onGetSwitch(const Message& msg) {
+  // Set pitch angle
+  Comm::cmd_res_t Comm::setPitchAngle(const Message& msg) {
     if(msg.argc < 2) return CRES_ERR;
-    gLogger.printf("<1:gsw,%i,%i>\n",atoi(msg.argv[1]),gSwitch.getSwitch(atoi(msg.argv[1])));
-    return CRES_None;
+
+    gPitcher.setAngle( atoi(msg.argv[1]) );
+
+    // Set pitcher angle
+    gLogger.printf("<1:sng,%i>\n", atoi(msg.argv[1]));
+
+    return CRES_OK;
   }
+
+  // Get pitch angle
+  Comm::cmd_res_t Comm::getPitchAngle(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    gLogger.printf("<1:gng,%i>\n", gPitcher.getAngle());
+
+    return CRES_OK;
+  }
+
+  // Get ball status
+  Comm::cmd_res_t Comm::getBallStatus(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    gLogger.printf("<1:gbs,%i>\n", gPitcher.getBallStatus());
+
+    return CRES_OK;
+  }
+
+  // Set motor status
+  Comm::cmd_res_t Comm::setMotorSpeed(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    gPitcher.setMotorSpeed( atoi(msg.argv[1]) );
+
+    // Set pitcher angle
+    gLogger.printf("<1:sms,%i>\n", atoi(msg.argv[1]));
+
+    return CRES_OK;
+  }
+
+  // Get motor status
+  Comm::cmd_res_t Comm::getMotorSpeed(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    gLogger.printf("<1:gms,%i>\n", gPitcher.getMotorSpeed());
+
+    return CRES_OK;
+  }
+
+  // Comm::cmd_res_t Comm::onBallSensor(const Message& msg) {
+  //   gLogger.printf("<1:bl,%i>\n", gSensor.bl());
+  //   return CRES_None;
+  // }
+
+  // Comm::cmd_res_t Comm::onSwitch(const Message& msg) {
+  //   gSwitch.process();
+  //   return CRES_None;
+  // }
+
+  // Comm::cmd_res_t Comm::onGetSwitch(const Message& msg) {
+  //   if(msg.argc < 2) return CRES_ERR;
+  //   gLogger.printf("<1:gsw,%i,%i>\n",atoi(msg.argv[1]),gSwitch.getSwitch(atoi(msg.argv[1])));
+  //   return CRES_None;
+  // }
 
 }

@@ -45,16 +45,24 @@ namespace usr {
       ECMD_SetPid,
       ECMD_SetEnc,
 
-      ECMD_CHARGE,
-      ECMD_KICK,
+      // ECMD_CHARGE,
+      // ECMD_KICK,
 
       ECMD_Dribble,
       ECMD_DrbWrite,
 
-      ECMD_BallSensor,
+      ECMD_GetPitchAngle,
+      ECMD_SetPitchAngle,
 
-      ECMD_Switch,
-      ECMD_getSwitch
+      ECMD_GetBallStatus,
+
+      ECMD_SetMotorSpeed,
+      ECMD_GetMotorSpeed
+
+      // ECMD_BallSensor,
+
+      // ECMD_Switch,
+      // ECMD_getSwitch
     };
 
     enum cmd_kw_t {
@@ -91,14 +99,23 @@ namespace usr {
     cmd_res_t onSetPid(const Message&);
     cmd_res_t onSetEnc(const Message&);
 
-    cmd_res_t onCharge(const Message&);
-    cmd_res_t onKick(const Message&);
+    // cmd_res_t onCharge(const Message&);
+    // cmd_res_t onKick(const Message&);
 
     cmd_res_t onDribble(const Message&);
     cmd_res_t onDrbWrite(const Message&);
-    cmd_res_t onBallSensor(const Message&);
-    cmd_res_t onSwitch(const Message&);
-    cmd_res_t onGetSwitch(const Message&);
+
+    cmd_res_t getPitchAngle(const Message&);
+    cmd_res_t setPitchAngle(const Message&);
+
+    cmd_res_t getBallStatus(const Message&);
+
+    cmd_res_t setMotorSpeed(const Message&);
+    cmd_res_t getMotorSpeed(const Message&);
+
+    // cmd_res_t onBallSensor(const Message&);
+    // cmd_res_t onSwitch(const Message&);
+    // cmd_res_t onGetSwitch(const Message&);
 
     static cmd_map_t loadCommandMap();
     static ckw_map_t loadKeywordMap();

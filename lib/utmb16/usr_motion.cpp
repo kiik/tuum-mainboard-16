@@ -5,7 +5,7 @@
 
 namespace usr {
 
-  typedef float mot_speed_t[MOTOR_COUNT];
+  
 
   const float MOTOR_ANGLE = M_PI / 4.0;
   const float MOTOR_CMS_TO_DGS = 2*M_PI*WHEEL_RADIUS / 360; // cm/s to deg/s
@@ -35,7 +35,7 @@ namespace usr {
   }
 
   void timeout() {
-    omniDrive(0, 0, 0);
+    //omniDrive(0, 0, 0);
   }
 
 

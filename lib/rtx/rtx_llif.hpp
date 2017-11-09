@@ -19,6 +19,7 @@ namespace rtx {
   struct dribbler_pin_t { PinName PWM; };
   struct ballsensor_pin_t { PinName BLS; };
   struct switches_pin_t { PinName SW0, SW1, SW2, SW3;};
+  struct pitcher_pin_t { PinName IR, SRV; };
 
 }
 

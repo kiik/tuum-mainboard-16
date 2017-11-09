@@ -27,12 +27,11 @@ namespace usr {
 
   static const motor_pin_t* MOTN[MOTOR_COUNT] = {&MOT0, &MOT1, &MOT2, &MOT3};
 
-  static const coil_pin_t COIL0 = {P0_10, P0_11, P1_29};
-  static const dribbler_pin_t DRB0 = {P2_5};
-  static const ballsensor_pin_t BL0 = {P1_30};
-
-
-  static const switches_pin_t SW = {P1_24, P1_23, P1_22, P1_21};
+  // static const coil_pin_t COIL0 = {P0_10, P0_11, P1_29};
+  static const dribbler_pin_t DRB0 = {P2_5}; // P2_5
+  static const pitcher_pin_t PTH0 = {P1_30, P2_4};
+  // static const ballsensor_pin_t BL0 = {P1_30};
+  // static const switches_pin_t SW = {P1_24, P1_23, P1_22, P1_21};
 
 }
 
