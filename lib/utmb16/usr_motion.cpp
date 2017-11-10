@@ -35,7 +35,7 @@ namespace usr {
   }
 
   void timeout() {
-    //omniDrive(0, 0, 0);
+    omniDrive(0, 0, 0);
   }
 
 
