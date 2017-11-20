@@ -56,8 +56,13 @@ namespace usr {
 
       ECMD_GetBallStatus,
 
+      ECMD_SetDiagnostics,
+      ECMD_GetDiagnostics,
+      
       ECMD_SetMotorSpeed,
-      ECMD_GetMotorSpeed
+      ECMD_GetMotorSpeed,
+
+      ECMD_GetMotorEncoders
 
       // ECMD_BallSensor,
 
@@ -110,8 +115,13 @@ namespace usr {
 
     cmd_res_t getBallStatus(const Message&);
 
+    cmd_res_t getDiagnostics(const Message&);
+    cmd_res_t setDiagnostics(const Message&);
+
     cmd_res_t setMotorSpeed(const Message&);
     cmd_res_t getMotorSpeed(const Message&);
+
+    cmd_res_t getMotorEncoders(const Message&);
 
     // cmd_res_t onBallSensor(const Message&);
     // cmd_res_t onSwitch(const Message&);

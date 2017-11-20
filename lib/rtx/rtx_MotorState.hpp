@@ -43,6 +43,8 @@ namespace rtx {
     void unlock();
     bool isLocked();
 
+    int getPosition();
+
   private:
     volatile bool locked;
 

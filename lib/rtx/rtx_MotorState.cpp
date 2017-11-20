@@ -107,5 +107,8 @@ namespace rtx {
   bool MotorState::isLocked() {
     return locked == true;
   }
-
+  
+  int MotorState::getPosition() {
+    return pos / 1200.0 * 360;
+  }
 }

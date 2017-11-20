@@ -35,6 +35,8 @@ namespace rtx {
     void updateSpeed(double);
     void run();
 
+    int getMotorstate();
+
     MotorState* getMotorState();
     PID* getPID();
 

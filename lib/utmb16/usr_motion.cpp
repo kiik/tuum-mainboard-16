@@ -8,6 +8,8 @@ namespace usr {
   
 
   const float MOTOR_ANGLE = M_PI / 4.0;
+  
+  // 0,067597222
   const float MOTOR_CMS_TO_DGS = 2*M_PI*WHEEL_RADIUS / 360; // cm/s to deg/s
 
   Ticker timeoutTick;
@@ -20,10 +22,11 @@ namespace usr {
     timeoutTick.attach_us(timeout, 1000 * 1000);
   }
 
+  // 2 * 3.14 * 3.875 / 360
   void omniDrive(float spd, float dir, float rot) {
     float v = spd / MOTOR_CMS_TO_DGS;
     float rot_v = rot * ROBOT_RADIUS / WHEEL_RADIUS;
-    float rad = dir * M_PI/180;
+    //float rad = dir * M_PI/180;
 
     mot_speed_t vs;
     vs[0] = v * -sin(MOTOR_ANGLE - dir) + rot_v;

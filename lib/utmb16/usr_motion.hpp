@@ -8,9 +8,9 @@
 
 namespace usr {
 
-	typedef float mot_speed_t[MOTOR_COUNT];
+  typedef float mot_speed_t[MOTOR_COUNT];
 
-   void set_speed(mot_speed_t vs);
+  void set_speed(mot_speed_t vs);
 
   extern void omniDrive(float, float, float);
 }

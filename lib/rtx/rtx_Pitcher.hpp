@@ -18,10 +18,16 @@ namespace rtx {
 
 			int getBallStatus();
 			
-			void setMotorSpeed(uint8_t);
+			void setDiagnostics(uint8_t);
+			int getDiagnostics();
+
+			void setMotorSpeed(uint8_t, bool);
 			int getMotorSpeed();
 
 			float map(float, float, float, float, float);
+
+
+
 
 		private:
 			Timer m_clk;
@@ -32,7 +38,7 @@ namespace rtx {
 
 			Dribbler *m_dribbler;
 
-			static const float m_min_motor_speed = 0.0;
+			static const float m_min_motor_speed = 0.5;
 			static const float m_max_motor_speed = 1.0;
 
 			static const float m_min_pos = 0.05;
@@ -40,5 +46,7 @@ namespace rtx {
 
 			static const int m_min_percent = 0;
 			static const int m_max_percent = 99;
+
+			bool m_diagnostics = false;
 	};
 }

@@ -13,6 +13,7 @@ namespace rtx {
 			void process();
 			void setPower(float);
 			void write(float);
+			void setSpeed(float);
 			float read();
 
 		private:

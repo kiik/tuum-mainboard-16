@@ -48,11 +48,20 @@ namespace usr {
     // Get ball status
     out["gbs"] = ECMD_GetBallStatus;
 
+    // Set diagnostics
+    out["sdia"] = ECMD_SetDiagnostics;
+
+    // Get diagnostics
+    out["gdia"] = ECMD_GetDiagnostics;
+
     // Set motor speed
     out["sms"] = ECMD_SetMotorSpeed;
 
     // Get motor status
     out["gms"] = ECMD_GetMotorSpeed;
+
+    // Get motor encoders
+    out["enc"] = ECMD_GetMotorEncoders;
 
     // out["bl"] = ECMD_BallSensor;
 
@@ -173,8 +182,17 @@ namespace usr {
       case ECMD_GetMotorSpeed:
         return getMotorSpeed(msg);
 
+      case ECMD_SetDiagnostics:
+        return setDiagnostics(msg);
+      case ECMD_GetDiagnostics:
+        return getDiagnostics(msg);
+
       case ECMD_SetMotorSpeed:
         return setMotorSpeed(msg);
+
+      case ECMD_GetMotorEncoders:
+        return getMotorEncoders(msg);
+
         
     // case ECMD_BallSensor:
     //     return onBallSensor(msg);
@@ -374,14 +392,52 @@ namespace usr {
     return CRES_OK;
   }
 
+  // Set diagnostics
+  Comm::cmd_res_t Comm::setDiagnostics(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    gPitcher.setDiagnostics( atoi(msg.argv[1]) );
+
+    // Set diagnostics
+    gLogger.printf("<1:sdia,%i>\n", atoi(msg.argv[1]));
+
+    return CRES_OK;
+  }
+
+  // Get diagnostics
+  Comm::cmd_res_t Comm::getDiagnostics(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    // Get diagnostics
+    gLogger.printf("<1:gdia,%i>\n", gPitcher.getDiagnostics());
+
+    return CRES_OK;
+  }
+
   // Set motor status
   Comm::cmd_res_t Comm::setMotorSpeed(const Message& msg) {
     if(msg.argc < 1) return CRES_ERR;
 
-    gPitcher.setMotorSpeed( atoi(msg.argv[1]) );
+    gPitcher.setMotorSpeed( atoi(msg.argv[1]), true );
 
     // Set pitcher angle
     gLogger.printf("<1:sms,%i>\n", atoi(msg.argv[1]));
+
+    return CRES_OK;
+  }
+
+  // Get motor encoders
+  Comm::cmd_res_t Comm::getMotorEncoders(const Message& msg) {
+    if(msg.argc < 1) return CRES_ERR;
+
+    // Set motor positions
+    gLogger.printf(
+      "<1:enc,%i,%i,%i,%i>\n", 
+      gMotors[0]->getMotorState()->getPosition(),
+      gMotors[1]->getMotorState()->getPosition(),
+      gMotors[2]->getMotorState()->getPosition(),
+      gMotors[3]->getMotorState()->getPosition()
+    );
 
     return CRES_OK;
   }
